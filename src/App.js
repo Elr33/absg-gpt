@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const [message, setMessage] = useState("");
+const [response, setResponse] = useState("");
+
+const handleSubmit = (e) => {
+e.preventDefault();
+fetch('http://localhost:3001/', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({ message }),
+})
+.then((res) => res.json())
+.then((data) => setResponse(data.message))
+};
+
+return (
+<div className="App">
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+<form onSubmit={handleSubmit} style={{textAlign: 'center'}}>
+<textarea
+value={message}
+onChange={(e) => setMessage(e.target.value)}
+style={{width: '80%', height: '50px'}}
+>
+</textarea>
+<br />
+<br />
+<button type="submit">Submit</button>
+</form>
+</div>
+{response &&
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+<div style={{textAlign: 'center'}}>
+<b></b>
+<br />
+<br />
+{response}
+</div>
+</div>
 }
+</div>
+);
+};
 
 export default App;
